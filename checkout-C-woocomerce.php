@@ -14,6 +14,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+// To check if woocomerce is active
 function is_woocommerce_active()
 {
     return in_array('woocommerce/woocommerce.php', apply_filters('active_plugins', get_option('active_plugins')));
@@ -43,6 +44,7 @@ if (!is_woocommerce_active()) {
     return;
 }
 
+// Enqueue js script
 function my_enqueue_scripts()
 {
     wp_enqueue_script('my-main-script', plugins_url('/js/main-script.js', __FILE__), array('jquery'), '1.0.0', true);
@@ -125,7 +127,10 @@ function custom_add_to_cart_product($productId, $qte)
 // Add woocommerce form to product page
 function custom_replace_add_to_cart_button()
 {
-    echo "<div id='checkout-form-c'> </div> ";
+    echo "
+            <div style='margin:3%'></div> 
+            <div id='checkout-form-c'> </div>   
+        ";
 }
 add_action('woocommerce_after_single_product_summary', 'custom_replace_add_to_cart_button');
 
@@ -154,13 +159,6 @@ add_filter('woocommerce_checkout_fields', 'custom_modify_checkout_fields');
 // remove add differenet addrest
 add_filter('woocommerce_cart_needs_shipping_address', '__return_false');
 
-//remove coupon form
-add_filter('woocommerce_checkout_coupon_form', 'woocommerce_checkout_coupon_form_func');
-function woocommerce_checkout_coupon_form_func()
-{
-    return null;
-}
-
 // Hide add to cart from shop page 
 function remove_add_to_cart_button($button_html, $product)
 {
@@ -174,4 +172,12 @@ add_filter('woocommerce_loop_add_to_cart_link', 'remove_add_to_cart_button', 100
 function remove_add_to_cart_button_product($is_purchasable, $product)
 {
     return false;
+}
+
+
+//remove coupon form
+add_filter('woocommerce_checkout_coupon_form', 'woocommerce_checkout_coupon_form');
+function woocommerce_checkout_coupon_form()
+{
+    return null;
 }
