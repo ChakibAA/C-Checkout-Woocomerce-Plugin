@@ -127,9 +127,13 @@ function custom_add_to_cart_product($productId, $qte)
 // Add woocommerce form to product page
 function custom_replace_add_to_cart_button()
 {
+    global $product;
+
     echo "
             <div style='margin:3%'></div> 
             <div id='checkout-form-c'> </div>   
+            <input name='product_id' type='hidden' value=" . get_the_ID() . "> </input>
+            <input name='product_var' type='hidden' value=" . $product->is_type('variable') . "> </input>
         ";
 }
 add_action('woocommerce_after_single_product_summary', 'custom_replace_add_to_cart_button');
@@ -181,3 +185,23 @@ function woocommerce_checkout_coupon_form()
 {
     return null;
 }
+
+function prevent_add_to_cart_template($template, $template_name)
+{
+    if ($template_name == 'single-product/add-to-cart/simple.php') {
+        return;
+    }
+    return $template;
+
+}
+
+add_filter("wc_get_template", "prevent_add_to_cart_template", 99999, 2);
+
+
+function prevent_add_to_cart_template_var()
+{
+    remove_action('woocommerce_single_variation', 'woocommerce_single_variation_add_to_cart_button', 20);
+
+}
+
+add_action('wp', 'prevent_add_to_cart_template_var');
