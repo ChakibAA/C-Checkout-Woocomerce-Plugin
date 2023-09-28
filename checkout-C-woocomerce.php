@@ -176,8 +176,8 @@ function remove_add_to_cart_button_product($is_purchasable, $product)
 
 
 //remove coupon form
-add_filter('woocommerce_checkout_coupon_form', 'woocommerce_checkout_coupon_form');
-function woocommerce_checkout_coupon_form()
+add_filter('woocommerce_checkout_coupon_form', 'woocommerce_checkout_coupon_form_func');
+function woocommerce_checkout_coupon_form_func()
 {
     return null;
 }
